@@ -1,5 +1,6 @@
 package br.com.caelum.leilao.builder;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ public class LeilaoBuilder {
 
 	private String descricao;
 	private List<Lance> lances = new ArrayList<>();
+	private LocalDate date;
 
 	public LeilaoBuilder to(String descricao) {
 		this.descricao = descricao;
@@ -22,9 +24,14 @@ public class LeilaoBuilder {
 	}
 
 	public Leilao build() {
-		Leilao leilao = new Leilao(descricao);
+		Leilao leilao = new Leilao(descricao, date);
 		lances.forEach((l) -> leilao.propoe(l));
 		return leilao;
+	}
+
+	public LeilaoBuilder onDate(LocalDate date) {
+		this.date = date;
+		return this;
 	}
 
 }

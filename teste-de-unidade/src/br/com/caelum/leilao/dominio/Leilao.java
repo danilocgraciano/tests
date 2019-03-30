@@ -1,5 +1,6 @@
 package br.com.caelum.leilao.dominio;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,9 +10,12 @@ public class Leilao {
 
 	private String descricao;
 	private List<Lance> lances;
+	private LocalDate date;
+	private boolean encerrado;
 
-	public Leilao(String descricao) {
+	public Leilao(String descricao, LocalDate date) {
 		this.descricao = descricao;
+		this.date = date;
 		this.lances = new ArrayList<Lance>();
 	}
 
@@ -50,9 +54,22 @@ public class Leilao {
 	}
 
 	private Lance getUltimoLance(Usuario usuario) {
-		List<Lance> lancesPorUsuario = lances.stream().filter(l -> l.getUsuario().equals(usuario)).collect(Collectors.toList());
+		List<Lance> lancesPorUsuario = lances.stream().filter(l -> l.getUsuario().equals(usuario))
+				.collect(Collectors.toList());
 		Lance ultimoLance = lancesPorUsuario.get(lancesPorUsuario.size() - 1);
 		return ultimoLance;
+	}
+
+	public void setEncerrado(boolean encerrado) {
+		this.encerrado = encerrado;
+	}
+
+	public boolean isEncerrado() {
+		return this.encerrado;
+	}
+
+	public LocalDate getDate() {
+		return this.date;
 	}
 
 }
