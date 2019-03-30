@@ -33,10 +33,16 @@ public class EncerradorDeLeilao {
 	}
 
 	private void encerra(Leilao leilao) {
-		leilao.setEncerrado(true);
-		totalEncerrados++;
-		dao.atualiza(leilao);
-		email.envia(leilao);
+
+		try {
+			leilao.setEncerrado(true);
+			totalEncerrados++;
+			dao.atualiza(leilao);
+			email.envia(leilao);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public int getTotalEncerrados() {

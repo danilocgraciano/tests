@@ -85,4 +85,60 @@ public class EncerradorDeLeilaoTest {
 
 	}
 
+	@Test
+	public void deveContinuarAExecucaoSeUmaExcecaoOcorrerNoBancoDeDados() {
+
+		LocalDate antiga = LocalDate.of(1999, 1, 20);
+
+		Leilao leilao1 = new LeilaoBuilder().to("TV de Plasma").onDate(antiga).build();
+		Leilao leilao2 = new LeilaoBuilder().to("Geladeira").onDate(antiga).build();
+
+		when(dao.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+		doThrow(new RuntimeException()).when(dao).atualiza(leilao1);
+
+		encerrador.encerra();
+
+		verify(dao, times(1)).atualiza(leilao2);
+		verify(email, times(1)).envia(leilao2);
+
+		verify(email, never()).envia(leilao1);
+
+	}
+
+	@Test
+	public void deveContinuarAExecucaoSeUmaExcecaoOcorrerNoEnviadorDeEmail() {
+
+		LocalDate antiga = LocalDate.of(1999, 1, 20);
+
+		Leilao leilao1 = new LeilaoBuilder().to("TV de Plasma").onDate(antiga).build();
+		Leilao leilao2 = new LeilaoBuilder().to("Geladeira").onDate(antiga).build();
+
+		when(dao.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+		doThrow(new RuntimeException()).when(email).envia(leilao1);
+
+		encerrador.encerra();
+
+		verify(dao, times(1)).atualiza(leilao2);
+		verify(email, times(1)).envia(leilao2);
+
+		verify(dao, times(1)).atualiza(leilao1);
+
+	}
+
+	@Test
+	public void deveSuprimirEnvioEmailCasoDaoSempreFalhe() {
+		LocalDate antiga = LocalDate.of(1999, 1, 20);
+
+		Leilao leilao1 = new LeilaoBuilder().to("TV de Plasma").onDate(antiga).build();
+		Leilao leilao2 = new LeilaoBuilder().to("Geladeira").onDate(antiga).build();
+
+		when(dao.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+		doThrow(new RuntimeException()).when(dao).atualiza(any(Leilao.class));
+
+		encerrador.encerra();
+
+		verify(email, never()).envia(any(Leilao.class));
+
+	}
+
 }
