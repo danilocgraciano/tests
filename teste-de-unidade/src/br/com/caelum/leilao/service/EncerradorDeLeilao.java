@@ -20,11 +20,20 @@ public class EncerradorDeLeilao {
 	public void encerra() {
 		List<Leilao> correntes = this.dao.correntes();
 		correntes.forEach((l) -> {
-			if (ChronoUnit.DAYS.between(l.getDate(), LocalDate.now()) >= 7) {
-				l.setEncerrado(true);
-				totalEncerrados++;
+			if (prazoLeilaoExpirado(l)) {
+				encerra(l);
 			}
 		});
+	}
+
+	private boolean prazoLeilaoExpirado(Leilao l) {
+		return ChronoUnit.DAYS.between(l.getDate(), LocalDate.now()) >= 7;
+	}
+
+	private void encerra(Leilao l) {
+		l.setEncerrado(true);
+		totalEncerrados++;
+		dao.atualiza(l);
 	}
 
 	public int getTotalEncerrados() {
