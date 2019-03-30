@@ -10,12 +10,12 @@ public class Leilao {
 
 	private String descricao;
 	private List<Lance> lances;
-	private LocalDate date;
+	private LocalDate data;
 	private boolean encerrado;
 
-	public Leilao(String descricao, LocalDate date) {
+	public Leilao(String descricao, LocalDate data) {
 		this.descricao = descricao;
-		this.date = date;
+		this.data = data;
 		this.lances = new ArrayList<Lance>();
 	}
 
@@ -68,8 +68,8 @@ public class Leilao {
 		return this.encerrado;
 	}
 
-	public LocalDate getDate() {
-		return this.date;
+	public LocalDate getData() {
+		return this.data;
 	}
 
 }

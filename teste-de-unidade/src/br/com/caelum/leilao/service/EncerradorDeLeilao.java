@@ -28,8 +28,8 @@ public class EncerradorDeLeilao {
 		});
 	}
 
-	private boolean prazoExpirado(Leilao l) {
-		return ChronoUnit.DAYS.between(l.getDate(), LocalDate.now()) >= 7;
+	private boolean prazoExpirado(Leilao leilao) {
+		return ChronoUnit.DAYS.between(leilao.getData(), LocalDate.now()) >= 7;
 	}
 
 	private void encerra(Leilao leilao) {
