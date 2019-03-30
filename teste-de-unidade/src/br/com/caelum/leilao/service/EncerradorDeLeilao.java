@@ -11,29 +11,32 @@ public class EncerradorDeLeilao {
 
 	private LeilaoDao dao;
 	private int totalEncerrados;
+	private EnviadorDeEmail email;
 
-	public EncerradorDeLeilao(LeilaoDao dao) {
+	public EncerradorDeLeilao(LeilaoDao dao, EnviadorDeEmail email) {
 		this.dao = dao;
+		this.email = email;
 
 	}
 
 	public void encerra() {
 		List<Leilao> correntes = this.dao.correntes();
-		correntes.forEach((l) -> {
-			if (prazoLeilaoExpirado(l)) {
-				encerra(l);
+		correntes.forEach((leilao) -> {
+			if (prazoExpirado(leilao)) {
+				encerra(leilao);
 			}
 		});
 	}
 
-	private boolean prazoLeilaoExpirado(Leilao l) {
+	private boolean prazoExpirado(Leilao l) {
 		return ChronoUnit.DAYS.between(l.getDate(), LocalDate.now()) >= 7;
 	}
 
-	private void encerra(Leilao l) {
-		l.setEncerrado(true);
+	private void encerra(Leilao leilao) {
+		leilao.setEncerrado(true);
 		totalEncerrados++;
-		dao.atualiza(l);
+		dao.atualiza(leilao);
+		email.envia(leilao);
 	}
 
 	public int getTotalEncerrados() {
