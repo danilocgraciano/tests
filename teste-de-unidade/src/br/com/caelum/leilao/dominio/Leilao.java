@@ -6,12 +6,32 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Leilao {
 
+	@Id
+	@GeneratedValue
+	private int id;
 	private String descricao;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "leilao")
 	private List<Lance> lances;
+	@Column(name = "data", columnDefinition = "DATE")
 	private LocalDate data;
 	private boolean encerrado;
+	@ManyToOne
+	private Usuario dono;
+	
+	Leilao(){
+		
+	}
 
 	public Leilao(String descricao, LocalDate data) {
 		this.descricao = descricao;
@@ -70,6 +90,18 @@ public class Leilao {
 
 	public LocalDate getData() {
 		return this.data;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public Usuario getDono() {
+		return dono;
+	}
+
+	public void setDono(Usuario dono) {
+		this.dono = dono;
 	}
 
 }
