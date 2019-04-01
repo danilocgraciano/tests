@@ -1,15 +1,30 @@
 package br.com.caelum.leilao.dominio;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class Lance {
 
+	@Id
+	@GeneratedValue
+	private int id;
+	@ManyToOne
 	private Usuario usuario;
 	private double valor;
-
-	public Lance(Usuario usuario, double valor) {
+	@ManyToOne
+	private Leilao leilao;
+	
+	Lance(){
 		
+	}
+	public Lance(Usuario usuario, double valor) {
+
 		if (valor <= 0)
 			throw new IllegalArgumentException("O valor do lance deve ser maior que zero");
-		
+
 		this.usuario = usuario;
 		this.valor = valor;
 	}
