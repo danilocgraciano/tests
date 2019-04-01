@@ -6,6 +6,8 @@ import static org.hamcrest.Matchers.equalTo;
 import javax.persistence.EntityManager;
 
 import static org.junit.Assert.*;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,6 +22,13 @@ public class UsuarioDaoTest {
 	public void setup() {
 		entityManager = ConnectionFactory.getEntityManager();
 		usuarioDao = new UsuarioDao(entityManager);
+
+		entityManager.getTransaction().begin();
+	}
+
+	@After
+	public void tearDown() {
+		entityManager.getTransaction().rollback();
 	}
 
 	@Test
@@ -48,29 +57,29 @@ public class UsuarioDaoTest {
 		assertNull(usuario);
 
 	}
-	
+
 	@Test
 	public void testeNomeInvalido() {
-		
+
 		String nome = "danilo2";
 		String email = "danilo@email.com";
 		Usuario usuario = new Usuario(nome, email);
 		usuario = usuarioDao.porNomeEEmail(nome, email);
-		
+
 		assertNull(usuario);
-		
+
 	}
-	
+
 	@Test
 	public void testeNomeEmailInvalidos() {
-		
+
 		String nome = "danilo2";
 		String email = "danilo2@email.com";
 		Usuario usuario = new Usuario(nome, email);
 		usuario = usuarioDao.porNomeEEmail(nome, email);
-		
+
 		assertNull(usuario);
-		
+
 	}
 
 }

@@ -12,6 +12,7 @@ public class LeilaoBuilder {
 	private String descricao;
 	private List<Lance> lances = new ArrayList<>();
 	private LocalDate date;
+	private boolean usado;
 
 	public LeilaoBuilder to(String descricao) {
 		this.descricao = descricao;
@@ -25,12 +26,18 @@ public class LeilaoBuilder {
 
 	public Leilao build() {
 		Leilao leilao = new Leilao(descricao, date);
+		leilao.setUsado(usado);
 		lances.forEach((l) -> leilao.propoe(l));
 		return leilao;
 	}
 
 	public LeilaoBuilder onDate(LocalDate date) {
 		this.date = date;
+		return this;
+	}
+
+	public LeilaoBuilder setUsado(boolean usado) {
+		this.usado = usado;
 		return this;
 	}
 
