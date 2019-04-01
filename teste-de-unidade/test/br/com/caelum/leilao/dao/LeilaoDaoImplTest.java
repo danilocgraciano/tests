@@ -147,15 +147,16 @@ public class LeilaoDaoImplTest {
 		usuarioDao.salvar(joao);
 		usuarioDao.salvar(jose);
 
-		LocalDate data5diasAntes = LocalDate.now().minus(Period.ofDays(10));
+		LocalDate data10diasAntes = LocalDate.now().minus(Period.ofDays(10));
+		LocalDate data6diasAntes = LocalDate.now().minus(Period.ofDays(6));
 
-		Leilao leilao1 = new LeilaoBuilder().to("Geladeira").onDate(data5diasAntes).lance(new Lance(joao, 2000.0))
+		Leilao leilao1 = new LeilaoBuilder().to("Geladeira").onDate(data10diasAntes).lance(new Lance(joao, 2000.0))
 				.lance(new Lance(jose, 2500.0)).setUsado(true).build();
 
-		Leilao leilao2 = new LeilaoBuilder().to("PLaystation 2").onDate(data5diasAntes).lance(new Lance(joao, 2000.0))
+		Leilao leilao2 = new LeilaoBuilder().to("PLaystation 2").onDate(data10diasAntes).lance(new Lance(joao, 2000.0))
 				.lance(new Lance(jose, 2500.0)).setUsado(true).build();
 
-		Leilao leilao3 = new LeilaoBuilder().to("PLaystation 4").onDate(LocalDate.now()).lance(new Lance(joao, 2000.0))
+		Leilao leilao3 = new LeilaoBuilder().to("PLaystation 4").onDate(data6diasAntes).lance(new Lance(joao, 2000.0))
 				.lance(new Lance(jose, 2500.0)).setUsado(true).build();
 
 		leilaoDaoImpl.save(leilao1);
