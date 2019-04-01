@@ -3,7 +3,6 @@ package br.com.caelum.leilao.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.not;
 
 import org.junit.Test;
 
@@ -19,10 +18,7 @@ public class LeilaoTest {
 
 		Usuario joao = new Usuario("João");
 
-		Leilao leilao = new LeilaoBuilder()
-				.to("Bicicleta")
-				.lance(new Lance(joao, 150))
-				.build();
+		Leilao leilao = new LeilaoBuilder().to("Bicicleta").lance(new Lance(joao, 150)).build();
 
 		assertThat(leilao.getLances().size(), equalTo(1));
 		assertThat(leilao.getLances(), hasItems(new Lance(joao, 150)));
@@ -35,29 +31,29 @@ public class LeilaoTest {
 		Usuario joao = new Usuario("João");
 		Usuario jose = new Usuario("José");
 
-		Leilao leilao = new LeilaoBuilder()
-				.to("Bicicleta")
-				.lance(new Lance(joao, 150))
-				.lance(new Lance(jose, 220))
+		Leilao leilao = new LeilaoBuilder().to("Bicicleta").lance(new Lance(joao, 150)).lance(new Lance(jose, 220))
 				.build();
 
 		assertThat(leilao.getLances().size(), equalTo(2));
 		assertThat(leilao.getLances(), hasItems(new Lance(joao, 150), new Lance(jose, 220)));
-		
+
 	}
 
 	@Test
 	public void naoDeveAceitarDoisLancesSeguidosDoMesmoUsuario() {
 		Usuario joao = new Usuario("João");
 
+		Lance lance1 = new Lance(joao, 150);
+		Lance lance2 = new Lance(joao, 180);
+		
 		Leilao leilao = new LeilaoBuilder()
 				.to("Bicicleta")
-				.lance(new Lance(joao, 150))
-				.lance(new Lance(joao, 180))
+				.lance(lance1)
+				.lance(lance2)
 				.build();
 
 		assertThat(leilao.getLances().size(), equalTo(1));
-		assertThat(leilao.getLances(), not(hasItems(new Lance(joao, 180))));
+		assertThat(leilao.getLances(), hasItems(lance1));
 	}
 
 	@Test
@@ -100,7 +96,7 @@ public class LeilaoTest {
 		Leilao leilao = builder.build();
 
 		Lance ultimoLance = leilao.getLances().get(leilao.getLances().size() - 1);
-		
+
 		assertThat(leilao.getLances().size(), equalTo(10));
 		assertThat(ultimoLance.getValor(), equalTo(510.0));
 
@@ -112,10 +108,7 @@ public class LeilaoTest {
 		Usuario joao = new Usuario("Joao");
 		Usuario jose = new Usuario("Jose");
 
-		Leilao leilao = new LeilaoBuilder()
-				.to("Bicicleta")
-				.lance(new Lance(joao, 100))
-				.lance(new Lance(jose, 110))
+		Leilao leilao = new LeilaoBuilder().to("Bicicleta").lance(new Lance(joao, 100)).lance(new Lance(jose, 110))
 				.build();
 
 		leilao.dobraLance(joao);
@@ -124,5 +117,5 @@ public class LeilaoTest {
 		assertThat(ultimoLance.getValor(), equalTo(200.0));
 
 	}
-	
+
 }
