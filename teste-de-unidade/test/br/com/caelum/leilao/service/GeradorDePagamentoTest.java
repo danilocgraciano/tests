@@ -70,32 +70,69 @@ public class GeradorDePagamentoTest {
 	@Test
 	public void deveGerarPagamentoNoProximoDiaUtilSendoHojeSabado(){
 		
-		Leilao leilao = new LeilaoBuilder()
-				.to("Playstation")
-				.onDate(LocalDate.now())
-				.lance(new Lance(new Usuario("João"), 2000.0))
-				.lance(new Lance(new Usuario("José"), 2500.0))
-				.build();
-
-		when(leilaoDao.encerrados()).thenReturn(Arrays.asList(leilao));
-		
 		when(relogio.hoje()).thenReturn(LocalDate.of(2019, 03, 30));
-		
-		geradorDePagamento.gera();
-		
-		ArgumentCaptor<Pagamento> argumento = ArgumentCaptor.forClass(Pagamento.class);
-		verify(pagamentoDao).save(argumento.capture());
-		
-		Pagamento pagamentoGerado = argumento.getValue();
-		
-		assertThat(pagamentoGerado.getDate().getDayOfWeek(), equalTo(DayOfWeek.MONDAY));
-
+		Pagamento pagamento = geraPagamento(relogio);
+		assertThat(pagamento.getDate().getDayOfWeek(), equalTo(DayOfWeek.MONDAY));
 		
 	}
 	
 	@Test
 	public void deveGerarPagamentoNoProximoDiaUtilSendoHojeDomingo(){
 		
+		
+		when(relogio.hoje()).thenReturn(LocalDate.of(2019, 03, 31));
+		Pagamento pagamento = geraPagamento(relogio);
+		assertThat(pagamento.getDate().getDayOfWeek(), equalTo(DayOfWeek.MONDAY));
+		
+	}
+
+	@Test
+	public void deveGerarPagamentoSegundaFeira(){
+		
+		when(relogio.hoje()).thenReturn(LocalDate.of(2019, 04, 01));
+		Pagamento pagamento = geraPagamento(relogio);
+		assertThat(pagamento.getDate().getDayOfWeek(), equalTo(DayOfWeek.MONDAY));
+		
+	}
+	
+	@Test
+	public void deveGerarPagamentoTercaFeira(){
+		
+		when(relogio.hoje()).thenReturn(LocalDate.of(2019, 04, 02));
+		Pagamento pagamento = geraPagamento(relogio);
+		assertThat(pagamento.getDate().getDayOfWeek(), equalTo(DayOfWeek.TUESDAY));
+		
+	}
+	
+	@Test
+	public void deveGerarPagamentoQuartaFeira(){
+		
+		when(relogio.hoje()).thenReturn(LocalDate.of(2019, 04, 03));
+		Pagamento pagamento = geraPagamento(relogio);
+		assertThat(pagamento.getDate().getDayOfWeek(), equalTo(DayOfWeek.WEDNESDAY));
+		
+	}
+	
+	@Test
+	public void deveGerarPagamentoQuintaFeira(){
+		
+		when(relogio.hoje()).thenReturn(LocalDate.of(2019, 04, 04));
+		Pagamento pagamento = geraPagamento(relogio);
+		assertThat(pagamento.getDate().getDayOfWeek(), equalTo(DayOfWeek.THURSDAY));
+		
+	}
+	
+	@Test
+	public void deveGerarPagamentoSextaFeira(){
+		
+		when(relogio.hoje()).thenReturn(LocalDate.of(2019, 04, 05));
+		Pagamento pagamento = geraPagamento(relogio);
+		assertThat(pagamento.getDate().getDayOfWeek(), equalTo(DayOfWeek.FRIDAY));
+		
+	}
+	
+	private Pagamento geraPagamento(Relogio relogio){
+		
 		Leilao leilao = new LeilaoBuilder()
 				.to("Playstation")
 				.onDate(LocalDate.now())
@@ -105,17 +142,12 @@ public class GeradorDePagamentoTest {
 		
 		when(leilaoDao.encerrados()).thenReturn(Arrays.asList(leilao));
 		
-		when(relogio.hoje()).thenReturn(LocalDate.of(2019, 03, 31));
-		
 		geradorDePagamento.gera();
 		
 		ArgumentCaptor<Pagamento> argumento = ArgumentCaptor.forClass(Pagamento.class);
 		verify(pagamentoDao).save(argumento.capture());
 		
-		Pagamento pagamentoGerado = argumento.getValue();
-		
-		assertThat(pagamentoGerado.getDate().getDayOfWeek(), equalTo(DayOfWeek.MONDAY));
-		
+		return argumento.getValue();
 		
 	}
 
