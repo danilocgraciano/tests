@@ -21,7 +21,7 @@ public class ConnectionFactory {
 		properties.put("javax.persistence.jdbc.password", "postgres");
 		properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
 		properties.put("hibernate.connection.shutdown", "true");
-		properties.put("hibernate.hbm2ddl.auto", "create");
+		properties.put("hibernate.hbm2ddl.auto", "none");
 		properties.put("hibernate.show_sql", "true");
 //		properties.put("hibernate.format_sql", "true");
 
