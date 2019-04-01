@@ -27,17 +27,8 @@ public class UsuarioDao {
 	}
 
 	public void salvar(Usuario usuario) {
-		try {
-			entityManager.getTransaction().begin();
-			if (usuario.getId() > 0) {
-				entityManager.persist(usuario);
-			} else {
-				entityManager.merge(usuario);
-			}
-			entityManager.getTransaction().commit();
-		} catch (Exception e) {
-			entityManager.getTransaction().rollback();
-		}
+		entityManager.persist(usuario);
+
 	}
 
 }

@@ -14,4 +14,10 @@ public interface LeilaoDao {
 
 	void atualiza(Leilao leilao);
 
+	Long total();
+
+	List<Leilao> novos();
+
+	List<Leilao> antigos();
+
 }

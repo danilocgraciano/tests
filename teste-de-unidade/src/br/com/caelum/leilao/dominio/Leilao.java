@@ -28,9 +28,10 @@ public class Leilao {
 	private boolean encerrado;
 	@ManyToOne
 	private Usuario dono;
-	
-	Leilao(){
-		
+	private boolean usado;
+
+	Leilao() {
+
 	}
 
 	public Leilao(String descricao, LocalDate data) {
@@ -102,6 +103,14 @@ public class Leilao {
 
 	public void setDono(Usuario dono) {
 		this.dono = dono;
+	}
+
+	public boolean isUsado() {
+		return usado;
+	}
+
+	public void setUsado(boolean usado) {
+		this.usado = usado;
 	}
 
 }
