@@ -28,7 +28,10 @@ public class UsuarioDao {
 
 	public void salvar(Usuario usuario) {
 		entityManager.persist(usuario);
+	}
 
+	public void deletar(Usuario usuario) {
+		entityManager.remove(usuario);
 	}
 
 }

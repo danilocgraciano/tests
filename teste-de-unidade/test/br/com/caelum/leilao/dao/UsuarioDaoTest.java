@@ -82,4 +82,20 @@ public class UsuarioDaoTest {
 
 	}
 
+	@Test
+	public void deveDeletarUsuario() {
+
+		Usuario usuario = new Usuario("usuario", "usuario@email.com");
+		usuarioDao.salvar(usuario);
+		usuarioDao.deletar(usuario);
+
+		entityManager.flush();
+		entityManager.clear();
+
+		Usuario deletado = usuarioDao.porNomeEEmail(usuario.getNome(), usuario.getEmail());
+
+		assertNull(deletado);
+
+	}
+
 }
