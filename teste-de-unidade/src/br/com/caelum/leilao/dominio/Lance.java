@@ -14,6 +14,7 @@ public class Lance {
 	@ManyToOne
 	private Usuario usuario;
 	private double valor;
+	
 	@ManyToOne
 	private Leilao leilao;
 	
@@ -65,6 +66,12 @@ public class Lance {
 		if (Double.doubleToLongBits(valor) != Double.doubleToLongBits(other.valor))
 			return false;
 		return true;
+	}
+	public Leilao getLeilao() {
+		return leilao;
+	}
+	public void setLeilao(Leilao leilao) {
+		this.leilao = leilao;
 	}
 
 }

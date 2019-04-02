@@ -201,5 +201,91 @@ public class LeilaoDaoImplTest {
 		assertThat(leiloes, hasItems(leilao));
 
 	}
+	
+	@Test
+	public void testaListaLeiloesPorPeriodo(){
+		
+		LocalDate dataInicio = LocalDate.now().minus(Period.ofDays(10));
+		LocalDate dataFim = LocalDate.now();
+		
+		
+		Leilao leilao1 = new LeilaoBuilder().to("Objeto 1").onDate(dataInicio).build();
+		Leilao leilao2 = new LeilaoBuilder().to("Objeto 2").onDate(dataInicio.plus(Period.ofDays(3))).build();
+		Leilao leilao3 = new LeilaoBuilder().to("Objeto 3").onDate(dataFim).build();
+		
+		Leilao leilao4 = new LeilaoBuilder().to("Objeto 4").onDate(dataFim.plus(Period.ofDays(2))).build();
+		Leilao leilao5 = new LeilaoBuilder().to("Objeto 5").onDate(dataInicio.minus(Period.ofDays(2))).build();
+		
+		leilaoDaoImpl.save(leilao1);
+		leilaoDaoImpl.save(leilao2);
+		leilaoDaoImpl.save(leilao3);
+		leilaoDaoImpl.save(leilao4);
+		leilaoDaoImpl.save(leilao5);
+	
+		List<Leilao> leiloes = leilaoDaoImpl.porPeriodo(dataInicio, dataFim);
+		
+		assertThat(leiloes.size(), equalTo(3));
+		assertThat(leiloes, hasItems(leilao1, leilao2, leilao3));
+	}
+	
+	@Test
+	public void testaListaLeiloesEncerradosPorPeriodo(){
+		
+		LocalDate dataInicio = LocalDate.now().minus(Period.ofDays(10));
+		LocalDate dataFim = LocalDate.now();
+		
+		
+		Leilao leilao1 = new LeilaoBuilder().to("Objeto 1").onDate(dataInicio).build();
+		Leilao leilao2 = new LeilaoBuilder().to("Objeto 2").onDate(dataInicio.plus(Period.ofDays(3))).setEncerrado(true).build();
+		Leilao leilao3 = new LeilaoBuilder().to("Objeto 3").onDate(dataFim).build();
+		
+		Leilao leilao4 = new LeilaoBuilder().to("Objeto 4").onDate(dataFim.plus(Period.ofDays(2))).build();
+		Leilao leilao5 = new LeilaoBuilder().to("Objeto 5").onDate(dataInicio.minus(Period.ofDays(2))).build();
+		
+		leilaoDaoImpl.save(leilao1);
+		leilaoDaoImpl.save(leilao2);
+		leilaoDaoImpl.save(leilao3);
+		leilaoDaoImpl.save(leilao4);
+		leilaoDaoImpl.save(leilao5);
+		
+		List<Leilao> leiloes = leilaoDaoImpl.porPeriodo(dataInicio, dataFim);
+		
+		assertThat(leiloes.size(), equalTo(2));
+		assertThat(leiloes, hasItems(leilao1, leilao3));
+	}
+	
+	@Test
+	public void testaListaLeiloesDoUsuario(){
+		
+		Usuario usuario1 = new Usuario("joao", "joao@gmail.com");
+		usuarioDao.salvar(usuario1);
+		
+		Usuario usuario2 = new Usuario("jose", "jose@gmail.com");
+		usuarioDao.salvar(usuario2);
+		
+		Lance lance1 = new Lance(usuario1, 2000.0);
+		Lance lance2 = new Lance(usuario2, 2500.0);
+		
+		Leilao leilao1 = new LeilaoBuilder().to("Objeto 1").onDate(LocalDate.now())
+				.lance(lance1)
+				.lance(lance2)
+				.build();
+		
+		Leilao leilao2 = new LeilaoBuilder().to("Objeto 1").onDate(LocalDate.now())
+				.lance(lance2)
+				.build();
+		
+		lance1.setLeilao(leilao1);
+		lance2.setLeilao(leilao2);
+		
+		leilaoDaoImpl.save(leilao1);
+		leilaoDaoImpl.save(leilao2);
+		
+		List<Leilao> leiloes = leilaoDaoImpl.listaLeiloesDoUsuario(usuario1);
+		
+		assertThat(leiloes.size(), equalTo(1));
+		assertThat(leiloes, hasItems(leilao1));
+		
+	}
 
 }
