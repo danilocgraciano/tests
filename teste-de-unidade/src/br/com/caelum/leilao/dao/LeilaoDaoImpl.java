@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import br.com.caelum.leilao.dominio.Leilao;
+import br.com.caelum.leilao.dominio.Usuario;
 
 public class LeilaoDaoImpl implements LeilaoDao {
 
@@ -58,6 +59,18 @@ public class LeilaoDaoImpl implements LeilaoDao {
 
 		return entityManager.createQuery("from Leilao l where l.data <= :data").setParameter("data", seteDiasAtras)
 				.getResultList();
+	}
+
+	@Override
+	public List<Leilao> porPeriodo(LocalDate inicio, LocalDate fim) {
+		return entityManager.createQuery("from Leilao l where l.data between :inicio and :fim and l.encerrado = false")
+				.setParameter("inicio", inicio).setParameter("fim", fim).getResultList();
+	}
+
+	@Override
+	public List<Leilao> listaLeiloesDoUsuario(Usuario usuario) {
+		return entityManager.createQuery("select l.leilao from Lance l where l.usuario = :usuario")
+				.setParameter("usuario", usuario).getResultList();
 	}
 
 }

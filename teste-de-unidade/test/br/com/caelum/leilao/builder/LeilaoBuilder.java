@@ -13,6 +13,7 @@ public class LeilaoBuilder {
 	private List<Lance> lances = new ArrayList<>();
 	private LocalDate date;
 	private boolean usado;
+	private boolean encerrado;
 
 	public LeilaoBuilder to(String descricao) {
 		this.descricao = descricao;
@@ -27,6 +28,7 @@ public class LeilaoBuilder {
 	public Leilao build() {
 		Leilao leilao = new Leilao(descricao, date);
 		leilao.setUsado(usado);
+		leilao.setEncerrado(encerrado);
 		lances.forEach((l) -> leilao.propoe(l));
 		return leilao;
 	}
@@ -38,6 +40,11 @@ public class LeilaoBuilder {
 
 	public LeilaoBuilder setUsado(boolean usado) {
 		this.usado = usado;
+		return this;
+	}
+	
+	public LeilaoBuilder setEncerrado(boolean encerrado) {
+		this.encerrado = encerrado;
 		return this;
 	}
 
