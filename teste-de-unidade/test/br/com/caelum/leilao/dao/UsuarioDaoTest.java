@@ -2,10 +2,9 @@ package br.com.caelum.leilao.dao;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertNull;
 
 import javax.persistence.EntityManager;
-
-import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -96,6 +95,34 @@ public class UsuarioDaoTest {
 
 		assertNull(deletado);
 
+	}
+
+	@Test
+	public void deveAlterarUmUsuario() {
+
+		String nome = "usuario";
+		String email = "usuario@email.com";
+
+		Usuario usuario = new Usuario(nome, email);
+		usuarioDao.salvar(usuario);
+
+		entityManager.flush();
+		entityManager.clear();
+
+		usuario.setNome("jose");
+		usuario.setEmail("jose@email.com");
+
+		usuarioDao.atualizar(usuario);
+
+		entityManager.flush();
+		entityManager.clear();
+
+		Usuario antigo = usuarioDao.porNomeEEmail(nome, email);
+		Usuario alterado = usuarioDao.porNomeEEmail(usuario.getNome(), usuario.getEmail());
+
+		assertNull(antigo);
+		assertThat(alterado.getNome(), equalTo("jose"));
+		assertThat(alterado.getEmail(), equalTo("jose@email.com"));
 	}
 
 }

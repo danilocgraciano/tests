@@ -73,4 +73,14 @@ public class LeilaoDaoImpl implements LeilaoDao {
 				.setParameter("usuario", usuario).getResultList();
 	}
 
+	@Override
+	public void deleta(Leilao leilao) {
+		entityManager.remove(leilao);
+	}
+
+	@Override
+	public Leilao porId(int id) {
+		return entityManager.find(Leilao.class, id);
+	}
+
 }

@@ -25,5 +25,9 @@ public interface LeilaoDao {
 	List<Leilao> porPeriodo(LocalDate inicio, LocalDate fim);
 	
 	List<Leilao> listaLeiloesDoUsuario(Usuario usuario);
+	
+	void deleta(Leilao leilao);
+	
+	Leilao porId(int id);
 
 }

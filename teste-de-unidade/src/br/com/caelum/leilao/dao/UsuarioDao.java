@@ -33,5 +33,9 @@ public class UsuarioDao {
 	public void deletar(Usuario usuario) {
 		entityManager.remove(usuario);
 	}
+	
+	public void atualizar(Usuario usuario){
+		entityManager.merge(usuario);
+	}
 
 }

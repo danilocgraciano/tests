@@ -3,6 +3,7 @@ package br.com.caelum.leilao.dao;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
+import static org.junit.Assert.assertNull;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -285,6 +286,19 @@ public class LeilaoDaoImplTest {
 		
 		assertThat(leiloes.size(), equalTo(1));
 		assertThat(leiloes, hasItems(leilao1));
+		
+	}
+	
+	@Test
+	public void deveDeletarLeilao(){
+		Leilao leilao = new LeilaoBuilder().to("Objeto 1").onDate(LocalDate.now()).build();
+		leilaoDaoImpl.save(leilao);
+		leilaoDaoImpl.deleta(leilao);
+		
+		entityManager.flush();
+		entityManager.clear();
+		
+		assertNull(leilaoDaoImpl.porId(leilao.getId()));
 		
 	}
 
